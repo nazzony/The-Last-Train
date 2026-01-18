@@ -30,13 +30,10 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-    public void RemoveItem(ItemInstance itemToRemove)
-    {
-        items.Remove(itemToRemove);
-    }
 
-    private void OnTriggerExit()
+    public void RemoveItem(ItemData itemToRemove)
     {
-        
-    }
+        if (items.Contains(itemToRemove))
+            items.Remove(itemToRemove);
+}
 }
