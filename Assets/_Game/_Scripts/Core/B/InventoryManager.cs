@@ -19,7 +19,7 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
     
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider other)
     {
         if (other.TryGetComponent(out InstanceItemContainer foundItem))
         {
@@ -29,6 +29,10 @@ public class InventoryManager : MonoBehaviour
                 Destroy(foundItem.gameObject);
             }
         }
+    }
+    public void Using() //in future remote to class main
+    {
+        Debug.Log("Using Item: " + itemName);
     }
 
     public void RemoveItem(ItemData itemToRemove)
