@@ -30,10 +30,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+    //public void Using() //in future remote to class main
+    //{
+      //  Debug.Log("Using Item: " + itemName);
+    //}
 
     public void RemoveItem(ItemData itemToRemove)
     {
         if (items.Contains(itemToRemove))
             items.Remove(itemToRemove);
-}
+    }
 }
