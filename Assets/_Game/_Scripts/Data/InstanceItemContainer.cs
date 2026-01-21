@@ -8,4 +8,9 @@ public class InstanceItemContainer : MonoBehaviour
     {
         return itemData;
     }
+public interface IItemReceiver
+{
+    bool TryAcceptItem(ItemData item, InventoryManager inventory);
+}
+
 }
