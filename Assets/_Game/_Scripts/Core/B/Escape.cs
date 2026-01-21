@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Escape: MonoBehaviour, IItemReceiver
+public class Escape : MonoBehaviour, IItemReceiver
 {
     private bool hasWheel;
     private bool hasLever;
@@ -12,21 +12,18 @@ public class Escape: MonoBehaviour, IItemReceiver
         switch (item.itemType)
         {
             case ItemData.ItemType.Wheel:
-                if (hasWheel) { Debug.Log("Wheel already used"); return false; }
+                if (hasWheel) return false;
                 hasWheel = true;
                 inventory.RemoveItem(item);
-                Debug.Log("Wheel installed.");
                 return true;
 
             case ItemData.ItemType.Lever:
-                if (hasLever) { Debug.Log("Lever already used."); return false; }
+                if (hasLever) return false;
                 hasLever = true;
                 inventory.RemoveItem(item);
-                Debug.Log("Lever used.");
                 return true;
 
             default:
-                Debug.Log("This item doesn't fit.");
                 return false;
         }
     }
