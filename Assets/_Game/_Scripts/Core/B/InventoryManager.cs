@@ -39,5 +39,5 @@ public class InventoryManager : MonoBehaviour
     {
         if (items.Contains(itemToRemove))
             items.Remove(itemToRemove);
-}
+    }
 }
