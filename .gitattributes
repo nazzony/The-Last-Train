@@ -1,9 +1,5 @@
-# Ignore Unity folders in GitHub language stats
-Assets/** linguist-vendored
-Packages/** linguist-vendored
-ProjectSettings/** linguist-vendored
-
-# Ignore shader files specifically
-*.shader linguist-vendored
-*.cginc linguist-vendored
-*.hlsl linguist-vendored
+*.meta linguist-vendored
+*.asset linguist-vendored
+*.prefab linguist-vendored
+*.unity linguist-vendored
+*.cs linguist-language=C#
