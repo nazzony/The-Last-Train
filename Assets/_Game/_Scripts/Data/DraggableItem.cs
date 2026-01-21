@@ -1,18 +1,23 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generatic;
-using UnityEngine.EventSystem;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    
-    void Start()
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        
+        Debug.Log("Begin drag");
     }
-    
-    void Update()
+
+    public void OnDrag(PointerEventData eventData)
     {
-        
+        transform.position = Input.mousePosition;
+        Debug.Log("Dragging");
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("End drag");
     }
 }
