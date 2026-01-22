@@ -42,9 +42,8 @@ public class MenuUIHandler : MonoBehaviour
     public enum Scenes
     {
         MainMenu = 0,
-        Settings = 1,
-        Scene1 = 2,
-        PauseMenu = 3,
+        Scene1 = 1,
+        Scene2 = 2,
     }
 
     void Update()

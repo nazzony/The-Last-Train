@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class InputManager : MonoBehaviour
             if(isHit.collider != null && isHit.collider.CompareTag("Ground"))
             {
                 EventManager.current.TriggerPlayerMove(isHit.point);
+            }
+            if (isHit.collider != null && isHit.collider.CompareTag("Door"))
+            {
+                SceneManager.LoadScene(2);
             }
 
         }
