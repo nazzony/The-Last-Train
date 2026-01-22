@@ -14,12 +14,6 @@ public class ItemData : ScriptableObject
         Debug.Log("Using Item: " + itemName);
     }
     
-    [TextArea]
-    public string description;
-    public enum ItemType
-    {
-        Coin,
-        Key,
-        TrainPart,
-    }
-}
+    [TextArea] 
+    public string description; 
+    public enum ItemType { Coin, Key, Lever, Wheel } }

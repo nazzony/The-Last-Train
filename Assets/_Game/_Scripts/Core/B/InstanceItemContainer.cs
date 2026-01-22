@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class InstanceItemContainer : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public ItemData item;
 
-    // Update is called once per frame
-    void Update()
+    public ItemData TakeItem()
     {
-        
+        return item;
     }
 }
