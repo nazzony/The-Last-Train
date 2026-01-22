@@ -32,6 +32,7 @@ public class Escape : MonoBehaviour, IItemReceiver
 
     public bool CanRide()
     {
+        Debug.Log("You escaped");
         return hasWheel && hasLever;
     }
 }
