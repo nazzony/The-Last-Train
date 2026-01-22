@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 873993863}
   - component: {fileID: 873993865}
   - component: {fileID: 873993866}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Dummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -758,8 +758,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.97735846, g: 0.0571662, b: 0.0571662, a: 1}
+  m_Sprite: {fileID: -6835624293301877137, guid: 45d2c89e5ee309b4a8bb2da5916aed69, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -777,8 +777,8 @@ Transform:
   m_GameObject: {fileID: 873993862}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.42, z: 0}
-  m_LocalScale: {x: 1, y: 2.6656, z: 1}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
+  m_LocalScale: {x: 6.8898, y: 7.8298774, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -844,17 +844,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.00018596649, y: 0.14009555}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: -0.03846154}
+    oldSize: {x: 0.2, y: 0.26}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.20119062, y: 0.26054224}
   m_EdgeRadius: 0
 --- !u!1 &959064689
 GameObject:
@@ -1213,7 +1213,7 @@ Transform:
   m_GameObject: {fileID: 1038750265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.3, y: -1.11, z: 0}
+  m_LocalPosition: {x: -9.3, y: -1.34, z: 0}
   m_LocalScale: {x: 1.38, y: 3.44, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3056,6 +3056,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
+      propertyPath: _Player
+      value: 
+      objectReference: {fileID: 873993862}
+    - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
+      propertyPath: doorsTransform
+      value: 
+      objectReference: {fileID: 1038750267}
+    - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 873993864}
     - target: {fileID: 3782342165394720587, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.33813
@@ -3111,10 +3123,10 @@ SceneRoots:
   m_Roots:
   - {fileID: 1602391112}
   - {fileID: 873993864}
+  - {fileID: 1038750267}
   - {fileID: 5327720}
   - {fileID: 1091343475}
   - {fileID: 1970230499}
-  - {fileID: 1777352959}
   - {fileID: 290429166}
   - {fileID: 6056906281341143702}
-  - {fileID: 1038750267}
+  - {fileID: 1777352959}
