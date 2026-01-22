@@ -15,12 +15,14 @@ public class Escape : MonoBehaviour, IItemReceiver
                 if (hasWheel) return false;
                 hasWheel = true;
                 inventory.RemoveItem(item);
+                Debug.Log("Wheel installed.");
                 return true;
 
             case ItemData.ItemType.Lever:
                 if (hasLever) return false;
                 hasLever = true;
                 inventory.RemoveItem(item);
+                Debug.Log("Lever installed.");
                 return true;
 
             default:
