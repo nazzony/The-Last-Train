@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Time.timeScale == 0f) return;
+        if(Input.GetMouseButtonDown (0))
+        {
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D isHit = Physics2D.Raycast(worldPos, Vector2.zero);
+            if(isHit.collider != null && isHit.collider.CompareTag("Ground"))
+            {
+                EventManager.current.TriggerPlayerMove(isHit.point);
+            }
+
+        }
     }
 }
