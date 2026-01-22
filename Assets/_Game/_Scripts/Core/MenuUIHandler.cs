@@ -7,7 +7,6 @@ public class MenuUIHandler : MonoBehaviour
 {
     [SerializeField]
     private GameObject SettingsPanel;
-    private bool isActive = false;
 
     // Buttons Handling
     public void ReturnToMainMenu()
@@ -26,12 +25,10 @@ public class MenuUIHandler : MonoBehaviour
     public void OpenSettings()
     {
         SettingsPanel.SetActive(true);
-        isActive = true;
     }
     public void CloseSettings()
     {
         SettingsPanel.SetActive(false);
-        isActive = false;
     }
     
     public void Exit()
