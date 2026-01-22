@@ -13,10 +13,14 @@ public class InputManager : MonoBehaviour
             if(isHit.collider != null && isHit.collider.CompareTag("Ground"))
             {
                 EventManager.current.TriggerPlayerMove(isHit.point);
-            }
-            if (isHit.collider != null && isHit.collider.CompareTag("Door"))
+            } 
+            else if (isHit.collider != null && isHit.collider.CompareTag("Door"))
             {
-                SceneManager.LoadScene(2);
+                DoorHandling number = isHit.collider.GetComponent<DoorHandling>();
+                if (number != null)
+                {
+                    SceneManager.LoadScene(number.toSceneNumber);
+                }
             }
 
         }
