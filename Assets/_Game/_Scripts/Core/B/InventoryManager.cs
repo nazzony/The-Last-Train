@@ -1,43 +1,60 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
     public List<ItemData> items = new();
-    public int MaxSize = 10;            
-    
+    public int MaxSize = 10;
+
+    public event Action OnInventoryChanged;
+
+    public bool HasSpace(int count = 1)
+    {
+        return items.Count + count <= MaxSize;
+    }
+
     public bool AddItem(ItemData itemToAdd)
     {
+        if (itemToAdd == null)
+        {
+            Debug.LogWarning("Tried to add null item.");
+            return false;
+        }
+
         if (items.Count < MaxSize)
         {
             items.Add(itemToAdd);
             Debug.Log($"Picked up: {itemToAdd.itemName}");
+            OnInventoryChanged?.Invoke();
             return true;
         }
 
         Debug.Log("Inventory is full!");
         return false;
     }
-    
-    private void OnTriggerEnter(Collider other)
+
+    public void RemoveItem(ItemData itemToRemove)
+    {
+        if (itemToRemove == null) return;
+
+        if (items.Remove(itemToRemove))
+        {
+            OnInventoryChanged?.Invoke();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.TryGetComponent(out InstanceItemContainer foundItem))
         {
-            bool added = AddItem(foundItem.TakeItem());
+            ItemData data = foundItem.TakeItem();
+            bool added = AddItem(data);
+
             if (added)
             {
                 Destroy(foundItem.gameObject);
             }
         }
     }
-    //public void Using() //in future remote to class main
-    //{
-      //  Debug.Log("Using Item: " + itemName);
-    //}
-
-    public void RemoveItem(ItemData itemToRemove)
-    {
-        if (items.Contains(itemToRemove))
-            items.Remove(itemToRemove);
-}
 }

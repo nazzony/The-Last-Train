@@ -9,11 +9,19 @@ public class ItemData : ScriptableObject
     public GameObject worldPrefab;
     public ItemType itemType;
 
+    [TextArea]
+    public string description;
+
     public void Using()
     {
         Debug.Log("Using Item: " + itemName);
     }
-    
-    [TextArea] 
-    public string description; 
-    public enum ItemType { Coin, Key, Lever, Wheel } }
+
+    public enum ItemType
+    {
+        Coin,
+        Key,
+        Lever,
+        Wheel
+    }
+}
