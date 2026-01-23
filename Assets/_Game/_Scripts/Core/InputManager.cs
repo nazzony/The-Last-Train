@@ -11,13 +11,18 @@ public class InputManager : MonoBehaviour
 
         if(Input.GetMouseButtonDown (0))
         {
+
+
+
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D isHit = Physics2D.Raycast(worldPos, Vector2.zero);
+
 
             if (isHit.collider != null && isHit.collider.CompareTag("Ground"))
             {
                 EventManager.current.TriggerPlayerMove(isHit.point);
             } 
+
 
             else if (isHit.collider != null && isHit.collider.CompareTag("Door"))
             {
@@ -26,12 +31,64 @@ public class InputManager : MonoBehaviour
                 {
                     DoorHandling number = isHit.collider.GetComponent<DoorHandling>();
                     GameData.TargetDoorId = number.getTargetId();
-                    if (number != null)
+                    if(number != null)
                     {
-                        SceneFader.instance.LoadScene(number.getSceneId());
+                        if ((number.isLocked && GameManager.instance.hasKey) || !number.isLocked)
+                        {
+                            SceneFader.instance.LoadScene(number.getSceneId());
+                        }
+                        else if (number.isLocked && !GameManager.instance.hasKey)
+                        {
+                            Debug.Log("Need A Key");
+                        }
                     }
                 }
             }
+
+            else if (isHit.collider != null && isHit.collider.CompareTag("TrashBin"))
+            {
+                float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
+                if(distance <= 2f)
+                {
+                    if (GameManager.instance.isTrashSearched == false)
+                    {
+                        GameManager.instance.isTrashSearched = true;
+                        GameManager.instance.hasCoin = true;
+                        Debug.Log("Picked up a coin");
+                    }
+                    else
+                    {
+                        Debug.Log("Only Trash Here");
+                    }
+                }
+            }
+
+            else if (isHit.collider != null && isHit.collider.CompareTag("VendingMachine"))
+            {
+                float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
+                if( distance <= 2f)
+                {
+                    if (GameManager.instance.isMachineUsed == true)
+                    {
+                        Debug.Log("Doesn't work anymore");
+                    }
+                    if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == true)
+                    {
+                        GameManager.instance.hasCoin = false;
+                        GameManager.instance.isMachineUsed = true;
+                        GameManager.instance.hasKey = true;
+                        Debug.Log("Got a Key!");
+                    }
+                    else if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == false)
+
+                    {
+                        Debug.Log("Don't have any money");
+                    }
+                }
+               
+            }
+
+
 
         }
     }

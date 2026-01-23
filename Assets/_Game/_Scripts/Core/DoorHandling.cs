@@ -6,6 +6,7 @@ public class DoorHandling : MonoBehaviour
     [SerializeField] private int _targetDoorId;
     [SerializeField] private int toSceneNumber;
     [SerializeField] private Transform _spawnPoint;
+    public bool isLocked;
 
     public int getSceneId() {  return toSceneNumber; }
     public int getTargetId() { return _targetDoorId; }
