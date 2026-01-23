@@ -1,6 +1,7 @@
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 
 [DefaultExecutionOrder(1000)]
 public class MenuUIHandler : MonoBehaviour
@@ -16,12 +17,12 @@ public class MenuUIHandler : MonoBehaviour
             Time.timeScale = 1f;
             GameIsPaused = false;
         }
-        SceneManager.LoadScene((int)Scenes.MainMenu);
+        SceneFader.instance.LoadScene((int)Scenes.MainMenu);
     }
     public void StartNew()
     {
         GameData.TargetDoorId = -1;
-        SceneManager.LoadScene((int)Scenes.Scene1);
+        SceneFader.instance.LoadScene((int)Scenes.Scene1);
     }
     public void OpenSettings()
     {

@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
                     GameData.TargetDoorId = number.getTargetId();
                     if (number != null)
                     {
-                        SceneManager.LoadScene(number.getSceneId());
+                        SceneFader.instance.LoadScene(number.getSceneId());
                     }
                 }
             }
