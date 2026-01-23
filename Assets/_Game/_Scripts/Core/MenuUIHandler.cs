@@ -20,6 +20,7 @@ public class MenuUIHandler : MonoBehaviour
     }
     public void StartNew()
     {
+        GameData.TargetDoorId = -1;
         SceneManager.LoadScene((int)Scenes.Scene1);
     }
     public void OpenSettings()
