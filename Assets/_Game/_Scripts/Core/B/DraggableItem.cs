@@ -10,7 +10,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [Header("Item Data")]
     public ItemData itemData;
-    public InventoryManager inventory; // призначити при створенні UI-іконки
+    public InventoryManager inventory; 
 
     private Canvas rootCanvas;
 
@@ -36,19 +36,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 1) Якщо кинули в UI слот - InventorySlot виставить parentAfterDrag
-        // 2) Якщо НЕ в слот - пробуємо дропнути у світ
 
         bool droppedOnSlot = parentAfterDrag != null && parentAfterDrag != transform.root;
-
-        // Перевіряємо, чи pointer зараз над UI елементом слота
-        // (простий спосіб: якщо новий parentAfterDrag - не старий root)
-        // Але ще треба спробувати world drop, якщо слот не змінився.
-
-        // World drop, якщо ми не перемістились у новий слот:
+        
         bool shouldTryWorldDrop = parentAfterDrag == null || parentAfterDrag == transform.root;
-
-        // Частіший кейс: parentAfterDrag залишився старим (ми повернемось), але ми хочемо спробувати world drop
+        
         shouldTryWorldDrop = true;
 
         bool acceptedByWorld = false;
@@ -62,7 +54,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
             if (hit.collider != null)
             {
-                // шукаємо IItemReceiver на цьому об’єкті або в батьках
                 var receiver = hit.collider.GetComponent<IItemReceiver>();
                 if (receiver == null)
                     receiver = hit.collider.GetComponentInParent<IItemReceiver>();
