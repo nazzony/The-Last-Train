@@ -4,6 +4,7 @@ public class Escape : MonoBehaviour, IItemReceiver
 {
     private bool hasWheel;
     private bool hasLever;
+    private bool rideAllowed; //перевірка чи все встановлено і можна їхати
 
     public bool TryAcceptItem(ItemData item, InventoryManager inventory)
     {
@@ -29,10 +30,25 @@ public class Escape : MonoBehaviour, IItemReceiver
                 return false;
         }
     }
-
     public bool CanRide()
     {
-        Debug.Log("You escaped");
         return hasWheel && hasLever;
+    }
+    
+    private void OnMouseDown() //після встановлення натиснути на дрезину шоб поїхати
+    {
+        if (!CanRide())
+        {
+            Debug.Log("Can't ride: missing parts.");
+            return;
+        }
+
+        rideAllowed = true;
+        Debug.Log("Ride allowed. (Animation/scene transition is handled by another system)");
+    }
+    
+    public bool IsRideAllowed()
+    {
+        return rideAllowed;
     }
 }

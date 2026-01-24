@@ -20,8 +20,10 @@ public class ItemData : ScriptableObject
     public enum ItemType
     {
         Coin,
-        Key,
-        Lever,
-        Wheel
+        Key,       
+        SmallKey,   
+        Lever,      
+        Wheel,      
+        Battery
     }
 }
