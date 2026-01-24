@@ -6,6 +6,8 @@ public class InstanceItemContainer : MonoBehaviour
 
     public ItemData TakeItem()
     {
-        return item;
+        var taken = item;
+        item = null;
+        return taken;
     }
 }

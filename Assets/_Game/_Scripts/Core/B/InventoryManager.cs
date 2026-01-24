@@ -34,14 +34,30 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
-    public void RemoveItem(ItemData itemToRemove)
+    public bool RemoveItem(ItemData itemToRemove)
     {
-        if (itemToRemove == null) return;
+        if (itemToRemove == null) return false;
 
-        if (items.Remove(itemToRemove))
-        {
+        bool removed = items.Remove(itemToRemove);
+        if (removed)
             OnInventoryChanged?.Invoke();
+
+        return removed;
+    }
+    public ItemData FindFirstByType(ItemData.ItemType type)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            var it = items[i];
+            if (it != null && it.itemType == type)
+                return it;
         }
+        return null;
+    }
+
+    public bool HasItemType(ItemData.ItemType type)
+    {
+        return FindFirstByType(type) != null;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -49,11 +65,16 @@ public class InventoryManager : MonoBehaviour
         if (other.TryGetComponent(out InstanceItemContainer foundItem))
         {
             ItemData data = foundItem.TakeItem();
-            bool added = AddItem(data);
+            if (data == null) return;
 
+            bool added = AddItem(data);
             if (added)
             {
                 Destroy(foundItem.gameObject);
+            }
+            else
+            {
+                foundItem.item = data; 
             }
         }
     }

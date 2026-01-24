@@ -10,14 +10,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [Header("Item Data")]
     public ItemData itemData;
-    public InventoryManager inventory; 
-
-    private Canvas rootCanvas;
-
-    private void Awake()
-    {
-        rootCanvas = GetComponentInParent<Canvas>();
-    }
+    public InventoryManager inventory;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -36,16 +29,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
-        bool droppedOnSlot = parentAfterDrag != null && parentAfterDrag != transform.root;
-        
-        bool shouldTryWorldDrop = parentAfterDrag == null || parentAfterDrag == transform.root;
-        
-        shouldTryWorldDrop = true;
+        bool pointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
         bool acceptedByWorld = false;
 
-        if (shouldTryWorldDrop)
+        if (!pointerOverUI)
         {
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 rayPos = new Vector2(worldPos.x, worldPos.y);
@@ -54,9 +42,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
             if (hit.collider != null)
             {
-                var receiver = hit.collider.GetComponent<IItemReceiver>();
-                if (receiver == null)
-                    receiver = hit.collider.GetComponentInParent<IItemReceiver>();
+                var receiver = hit.collider.GetComponent<IItemReceiver>() 
+                               ?? hit.collider.GetComponentInParent<IItemReceiver>();
 
                 if (receiver != null && itemData != null && inventory != null)
                 {
