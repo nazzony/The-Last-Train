@@ -3,71 +3,111 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /*
- * UI-іконка предмета, яку можна перетягувати.
+ * Логіка:
+ * - під час перетягування іконка слідує за курсором
+ * - якщо предмет відпустили над UI → іконка повертається в слот
+ * - якщо предмет відпустили НЕ над UI:
+ *     * позиція курсору переводиться з Screen space у World space через камеру
+ *     * виконується Physics2D.Raycast у точці курсору
+ *     * шукається обʼєкт, який реалізує IItemReceiver
+ *     * предмет передається цьому обʼєкту
  *
- * Функціонал:
- * - drag в межах UI (перетягування між слотами)
- * - drop "в світ" (якщо відпустили не над UI):
- *   робиться Physics2D перевірка в точці курсору,
- *   шукається IItemReceiver і передається предмет.
- 
- * Якщо receiver прийняв предмет (повернув true) — іконка знищується.
- * ВАЖЛИВО: receiver сам вирішує, чи витрачати предмет в інвентарі.
+ * Якщо предмет прийнято:
+ * - іконка видаляється з UI
+ * - receiver сам вирішує, що робити з предметом (витратити / прийняти)
+ *
+ * ВАЖЛИВО:
+ * - працює для 2D сцен
+ * - потребує EventSystem у сцені
+ * - камера має дивитись на сцену (Orthographic або Perspective)
  */
 
 public class DraggableItem : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    // Image іконки предмета
     public Image image;
 
+    // Батьківський обʼєкт, куди іконка повертається, якщо дроп не прийняли
     [HideInInspector] public Transform parentAfterDrag;
 
     [Header("Item Data")]
+    // Дані предмета (ScriptableObject)
     public ItemData itemData;
+
+    // Посилання на інвентар (щоб receiver міг витратити предмет)
     public InventoryManager inventory;
     
-    private Canvas rootCanvas;
+    [Header("Camera")]
+    public Camera cam;
 
     private void Awake()
     {
-        rootCanvas = GetComponentInParent<Canvas>();
+        if (cam == null)
+            cam = Camera.main;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
+        // Запамʼятовуємо слот, з якого почали drag
         parentAfterDrag = transform.parent;
         
-        if (rootCanvas != null)
-            transform.SetParent(rootCanvas.transform);
-        else
-            transform.SetParent(transform.root); // fallback, якщо Canvas не знайшли
-
+        transform.SetParent(transform.root);
         transform.SetAsLastSibling();
 
-        // Вимикаємо raycastTarget, щоб UI не блокував drop-подію
-        if (image) image.raycastTarget = false;
+        // Вимикаємо raycastTarget, щоб UI не блокував drop
+        if (image != null)
+            image.raycastTarget = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // за курсором
+        // Іконка рухається за курсором
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         bool accepted = false;
-
-        // Якщо ми НЕ над UI, значить пробуємо дропнути предмет "у світ"
-        if (EventSystem.current != null && !EventSystem.current.IsPointerOverGameObject())
+        
+        if (EventSystem.current != null &&
+            !EventSystem.current.IsPointerOverGameObject())
         {
-            if (Camera.main != null)
+            if (cam != null)
             {
-                Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                // Переводимо позицію миші з екрану в координати світу
+                Vector2 worldPos = cam.ScreenToWorldPoint(Input.mousePosition);
+                
                 RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
                 if (hit.collider != null)
                 {
                     var receiver = hit.collider.GetComponent<IItemReceiver>()
-                                   ?? hit.collider.GetComponentInParent<IItem
+                                   ?? hit.collider.GetComponentInParent<IItemReceiver>();
+
+                    if (receiver != null)
+                    {
+                        accepted = receiver.TryAcceptItem(itemData, inventory);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("DraggableItem: Camera not assigned");
+            }
+        }
+
+        // Якщо предмет прийняли — видаляємо іконку з UI
+        if (accepted)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        transform.SetParent(parentAfterDrag);
+        transform.localPosition = Vector3.zero;
+        
+        if (image != null)
+            image.raycastTarget = true;
+    }
+}
