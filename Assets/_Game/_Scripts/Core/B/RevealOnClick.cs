@@ -4,13 +4,30 @@ public class RevealOnClick : MonoBehaviour
 {
     [SerializeField] private GameObject toReveal;
     [SerializeField] private string revealLog = "There was something under the documents...";
+    [SerializeField] private string revealId = "docs_01"; // для збереження стану
 
     private bool revealed;
-    private Collider col;
+    private Collider2D col;
+
+    private string SaveKey => $"reveal_{revealId}";
 
     private void Awake()
     {
-        col = GetComponent<Collider>();
+        col = GetComponent<Collider2D>();
+    }
+
+    private void Start()
+    {
+        revealed = PlayerPrefs.GetInt(SaveKey, 0) == 1;
+
+        if (revealed)
+        {
+            if (toReveal != null)
+                toReveal.SetActive(true);
+
+            if (col != null)
+                col.enabled = false;
+        }
     }
 
     private void OnMouseDown()
@@ -23,7 +40,11 @@ public class RevealOnClick : MonoBehaviour
             toReveal.SetActive(true);
 
         if (col != null)
-            col.enabled = false; 
+            col.enabled = false;
+
+        PlayerPrefs.SetInt(SaveKey, 1);
+        PlayerPrefs.Save();
+
         Debug.Log(revealLog);
     }
 }
