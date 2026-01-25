@@ -1,0 +1,5 @@
+*.meta linguist-vendored
+*.asset linguist-vendored
+*.prefab linguist-vendored
+*.unity linguist-vendored
+*.cs linguist-language=C#
