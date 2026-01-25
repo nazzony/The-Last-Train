@@ -97,3 +97,26 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# ===== Unity Shader Cache =====
+Library/ShaderCache/
+Library/ShaderCache.db
+Library/ShaderCache/
+Library/ShaderCache.db.meta
+
+# Shader variant collections cache
+Library/ShaderCompiler/
+Library/ShaderCompiler.meta
+
+# Unity GI / lighting cache
+Library/GI/
+Library/GI.cache
+
+# Temporary build artifacts
+Temp/
+Obj/
+Logs/
+
+# Crash reports
+crashlytics-build.properties
+
