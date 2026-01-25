@@ -26,8 +26,16 @@ public class DoorLock : MonoBehaviour
     private void Awake()
     {
       
-        if (blockingCollider == null) blockingCollider = GetComponent<Collider>();
-        if (interactCollider == null) interactCollider = GetComponent<Collider>();
+        // Якщо в об'єкта 2 колайдери (один блокує, інший для кліку) — підхопимо їх автоматично
+        if (blockingCollider == null || interactCollider == null)
+        {
+            var cols = GetComponents<Collider>();
+            if (cols != null && cols.Length > 0)
+            {
+                if (blockingCollider == null) blockingCollider = cols[0];
+                if (interactCollider == null) interactCollider = (cols.Length > 1) ? cols[1] : cols[0];
+            }
+        }
     }
 
     private void Start()
@@ -57,7 +65,14 @@ public class DoorLock : MonoBehaviour
         }
 
         // 1) Витратити ключ 
-        inventory.RemoveItemType(requiredKey);
+        var keyItem = inventory.FindFirstByType(requiredKey);
+        if (keyItem == null)
+        {
+            Debug.Log("No key");
+            onLocked?.Invoke();
+            return;
+        }
+        inventory.RemoveItem(keyItem);
 
         // 2) Позначити як відкриті та зберегти
         opened = true;
