@@ -25,16 +25,13 @@ public class Escape : MonoBehaviour, IItemReceiver
                 inventory.RemoveItem(item);
                 Debug.Log("Lever installed.");
                 return true;
-
-            default:
-                return false;
         }
+        return false;
     }
     public bool CanRide()
     {
         return hasWheel && hasLever;
     }
-    
     private void OnMouseDown() //після встановлення натиснути на дрезину шоб поїхати
     {
         if (!CanRide())
@@ -42,11 +39,10 @@ public class Escape : MonoBehaviour, IItemReceiver
             Debug.Log("Can't ride: missing parts.");
             return;
         }
-
         rideAllowed = true;
-        Debug.Log("Ride allowed. (Animation/scene transition is handled by another system)");
+        Debug.Log("Ride allowed");
     }
-    
+
     public bool IsRideAllowed()
     {
         return rideAllowed;
