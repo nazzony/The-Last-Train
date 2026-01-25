@@ -26,6 +26,9 @@ public class Escape : MonoBehaviour, IItemReceiver
     private string WheelKey => $"trolley_wheel_{trolleyId}";
     private string LeverKey => $"trolley_lever_{trolleyId}";
     private string RideKey  => $"trolley_ride_{trolleyId}";
+    
+    [SerializeField] private ControlPanel controlPanel;
+
 
     private void Start()
     {
@@ -64,8 +67,11 @@ public class Escape : MonoBehaviour, IItemReceiver
 
     public bool CanRide()
     {
-        return hasWheel && hasLever;
+        bool partsOk = hasWheel && hasLever;
+        bool powerOk = (controlPanel == null) ? true : controlPanel.PowerReady; 
+        return partsOk && powerOk;
     }
+
 
     private void OnMouseDown() //після встановлення натиснути на дрезину шоб поїхати
     {

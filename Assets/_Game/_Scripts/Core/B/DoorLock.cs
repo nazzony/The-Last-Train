@@ -1,6 +1,18 @@
 using UnityEngine;
 using UnityEngine.Events;
+
 //логіка для потрапляння в дері вокзалу з втратою ключа але збереженням стану дверей(відкриті)
+/*
+ * Пазл-двері вокзалу:
+ * - при кліку перевіряє, чи є потрібний ключ в інвентарі
+ * - якщо ключ є → витрачає його, відкриває двері, зберігає стан (PlayerPrefs)
+ * - якщо ключа немає → викликає onLocked
+
+ * Колайдери:
+ * - blockingCollider: блокує прохід (вимикаємо після відкриття)
+ * - interactCollider: ловить клік (вимикаємо після відкриття, щоб не клікали знову)
+ */
+
 public class DoorLock : MonoBehaviour
 {
     [Header("Requirements")]
@@ -23,16 +35,24 @@ public class DoorLock : MonoBehaviour
 
     private void Awake()
     {
+        
         if (blockingCollider == null || interactCollider == null)
         {
             var cols = GetComponents<Collider2D>();
+
             if (cols.Length > 0)
             {
                 if (blockingCollider == null) blockingCollider = cols[0];
-                if (interactCollider == null) interactCollider = cols.Length > 1 ? cols[1] : cols[0];
+
+                // Якщо є другий колайдер — беремо його як interact
+                if (interactCollider == null)
+                    interactCollider = (cols.Length > 1) ? cols[1] : cols[0];
             }
         }
+
+       
     }
+
     private void Start()
     {
         opened = PlayerPrefs.GetInt(SaveKey, 0) == 1;
@@ -55,9 +75,9 @@ public class DoorLock : MonoBehaviour
             onLocked?.Invoke();
             return;
         }
-
         inventory.RemoveItem(key);
 
+        // зберігаємо стан "відкрито"
         opened = true;
         PlayerPrefs.SetInt(SaveKey, 1);
         PlayerPrefs.Save();
@@ -68,7 +88,10 @@ public class DoorLock : MonoBehaviour
 
     private void ApplyOpenedState()
     {
+        // Блокуючий колайдер вимикаємо завжди (щоб можна пройти)
         if (blockingCollider != null) blockingCollider.enabled = false;
-        if (interactCollider != null) interactCollider.enabled = false;
+        // Колайдер для кліку вимикаємо лише якщо він інший,
+        if (interactCollider != null && interactCollider != blockingCollider)
+            interactCollider.enabled = false;
     }
 }

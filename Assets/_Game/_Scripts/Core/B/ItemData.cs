@@ -1,32 +1,30 @@
-/*
- * Описує один предмет гри як дані
- * - назва
- * - іконка для інвентаря
- * - тип (для перевірок у пазлах)
- */
-
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/Item Data")]
+/*
+ * ItemData
+ * Використовується для:
+ * - інвентаря
+ * - drag & drop
+ * - пазлів (перевірка типу предмета)
+ */
+
+[CreateAssetMenu(
+    fileName = "NewItem",
+    menuName = "Game/Item"
+)]
 public class ItemData : ScriptableObject
 {
+    public ItemType itemType;
+    public string itemName;
+    public Sprite icon;
     public enum ItemType
     {
         Coin,
-        Key,       
-        SmallKey,   
-        Lever,      
-        Wheel,      
+        Key,
+        SmallKey,
+        Wheel,
+        Lever,
         Battery
     }
-}
 
-    [Header("Info")]
-    public string itemName;
-
-    [Header("UI")]
-    public Sprite icon;
-
-    [Header("Logic")]
-    public ItemType itemType;
 }
