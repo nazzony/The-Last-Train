@@ -35,6 +35,7 @@ public class InputManager : MonoBehaviour
                     {
                         if ((number.isLocked && GameManager.instance.hasKey) || !number.isLocked)
                         {
+                            AudioManager.instance.playSFX(AudioManager.instance.doorSound);
                             SceneFader.instance.LoadScene(number.getSceneId());
                         }
                         else if (number.isLocked && !GameManager.instance.hasKey)
@@ -54,10 +55,12 @@ public class InputManager : MonoBehaviour
                     {
                         GameManager.instance.isTrashSearched = true;
                         GameManager.instance.hasCoin = true;
+                        AudioManager.instance.playSFX(AudioManager.instance.coinSound);
                         Debug.Log("Picked up a coin");
                     }
                     else
                     {
+                        AudioManager.instance.playSFX(AudioManager.instance.trashSound);
                         Debug.Log("Only Trash Here");
                     }
                 }
@@ -71,18 +74,21 @@ public class InputManager : MonoBehaviour
                     if (GameManager.instance.isMachineUsed == true)
                     {
                         Debug.Log("Doesn't work anymore");
+                        AudioManager.instance.playSFX(AudioManager.instance.vendingSound);
                     }
-                    if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == true)
+                    else if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == true)
                     {
                         GameManager.instance.hasCoin = false;
                         GameManager.instance.isMachineUsed = true;
                         GameManager.instance.hasKey = true;
+                        AudioManager.instance.playSFX(AudioManager.instance.keySound);
                         Debug.Log("Got a Key!");
                     }
                     else if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == false)
 
                     {
                         Debug.Log("Don't have any money");
+                        AudioManager.instance.playSFX(AudioManager.instance.vendingSound);
                     }
                 }
                
