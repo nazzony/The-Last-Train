@@ -12,9 +12,29 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    //Singleton
+
+    public static InventoryManager instance;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    //Main Script
+
     [SerializeField] private int maxSize = 10;
 
     public readonly List<ItemData> items = new List<ItemData>();
+
     public event Action OnInventoryChanged;
 
     public bool HasSpace() => items.Count < maxSize;

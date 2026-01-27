@@ -4,57 +4,73 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
+    [Header("Quest Items")]
+    public ItemData coinItemData;
+    public ItemData keyItemData;
+
     public Transform playerTransform;
     void Update()
     {
         if (Time.timeScale == 0f) return;
 
-        if(Input.GetMouseButtonDown (0))
+        if (Input.GetMouseButtonDown(0))
         {
 
-
+            //AudioManager.instance.playSFX(AudioManager.instance.clickSound);
 
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D isHit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-
+            //Ground
             if (isHit.collider != null && isHit.collider.CompareTag("Ground"))
             {
                 EventManager.current.TriggerPlayerMove(isHit.point);
-            } 
+            }
 
-
+            //Door
             else if (isHit.collider != null && isHit.collider.CompareTag("Door"))
             {
                 float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
+                bool playerHasKey = InventoryManager.instance.HasItemType(ItemData.ItemType.Key);
                 if (distance <= 2.35f)
                 {
                     DoorHandling number = isHit.collider.GetComponent<DoorHandling>();
                     GameData.TargetDoorId = number.getTargetId();
-                    if(number != null)
+                    if (number != null)
                     {
-                        if ((number.isLocked && GameManager.instance.hasKey) || !number.isLocked)
+                        string allItems = "В кишені: ";
+                        foreach (var item in InventoryManager.instance.items) allItems += item.itemType + ", ";
+                        Debug.Log(allItems);
+                        
+                        bool hasKeyInBag = InventoryManager.instance.HasItemType(ItemData.ItemType.Key);
+
+                        if ((number.isLocked && hasKeyInBag) || !number.isLocked)
                         {
-                            AudioManager.instance.playSFX(AudioManager.instance.doorSound);
+                            Debug.Log("Ключ підійшов! Відчиняю.");
+                            AudioManager.instance.playSFX(AudioManager.instance.clickSound);
                             SceneFader.instance.LoadScene(number.getSceneId());
                         }
-                        else if (number.isLocked && !GameManager.instance.hasKey)
+                        else
                         {
-                            Debug.Log("Need A Key");
+                            Debug.Log("Двері зачинені. Потрібен ключ (Type: Key).");
+                            AudioManager.instance.playSFX(AudioManager.instance.clickSound);
                         }
                     }
                 }
             }
 
+            //Trash Bin
             else if (isHit.collider != null && isHit.collider.CompareTag("TrashBin"))
             {
                 float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
-                if(distance <= 2f)
+                if (distance <= 2f)
                 {
                     if (GameManager.instance.isTrashSearched == false)
                     {
                         GameManager.instance.isTrashSearched = true;
-                        GameManager.instance.hasCoin = true;
+
+                        InventoryManager.instance.AddItem(coinItemData);
+
                         AudioManager.instance.playSFX(AudioManager.instance.coinSound);
                         Debug.Log("Picked up a coin");
                     }
@@ -65,37 +81,15 @@ public class InputManager : MonoBehaviour
                     }
                 }
             }
-
-            else if (isHit.collider != null && isHit.collider.CompareTag("VendingMachine"))
+            else
             {
-                float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
-                if( distance <= 2f)
+                IItemReceiver receiver = isHit.collider.GetComponent<IItemReceiver>();
+
+                if (receiver != null)
                 {
-                    if (GameManager.instance.isMachineUsed == true)
-                    {
-                        Debug.Log("Doesn't work anymore");
-                        AudioManager.instance.playSFX(AudioManager.instance.vendingSound);
-                    }
-                    else if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == true)
-                    {
-                        GameManager.instance.hasCoin = false;
-                        GameManager.instance.isMachineUsed = true;
-                        GameManager.instance.hasKey = true;
-                        AudioManager.instance.playSFX(AudioManager.instance.keySound);
-                        Debug.Log("Got a Key!");
-                    }
-                    else if (GameManager.instance.isMachineUsed == false && GameManager.instance.hasCoin == false)
-
-                    {
-                        Debug.Log("Don't have any money");
-                        AudioManager.instance.playSFX(AudioManager.instance.vendingSound);
-                    }
+                    receiver.TryAcceptItem(null, InventoryManager.instance);
                 }
-               
             }
-
-
-
         }
     }
 }

@@ -3168,6 +3168,7 @@ GameObject:
   - component: {fileID: 2012849277}
   - component: {fileID: 2012849276}
   - component: {fileID: 2012849275}
+  - component: {fileID: 2012849278}
   m_Layer: 0
   m_Name: VendingMachine
   m_TagString: VendingMachine
@@ -3295,6 +3296,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2012849278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012849274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d307dee0e95eb01fb22472541c891ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TryToUse
+  keyItem: {fileID: 11400000, guid: 91e87798c5a7240479172ea95f4e281c, type: 2}
+  coinItem: {fileID: 11400000, guid: 71fd1286c579e9b42bf34095364238a9, type: 2}
+  machineId: machine_01
 --- !u!1001 &6056906281341143702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3307,6 +3323,14 @@ PrefabInstance:
       propertyPath: _Player
       value: 
       objectReference: {fileID: 873993862}
+    - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
+      propertyPath: keyItemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 91e87798c5a7240479172ea95f4e281c, type: 2}
+    - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
+      propertyPath: coinItemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 71fd1286c579e9b42bf34095364238a9, type: 2}
     - target: {fileID: 1719695741351175237, guid: 9e92294ac2835534d81befd7fcf82d8c, type: 3}
       propertyPath: doorsTransform
       value: 
