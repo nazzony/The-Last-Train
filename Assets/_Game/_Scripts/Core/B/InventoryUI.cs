@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
-    // Посилання на менеджер інвентаря (де зберігаються предмети)
     public InventoryManager inventory;
     
     public Transform slotsParent;
@@ -23,7 +22,6 @@ public class InventoryUI : MonoBehaviour
 
     private void Awake()
     {
-        // Захист від помилки, якщо slotsParent не призначили в інспекторі
         if (slotsParent == null)
         {
             Debug.LogError("InventoryUI: slotsParent не призначений");
@@ -31,13 +29,27 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // Знаходимо всі InventorySlot серед дочірніх обʼєктів
         slots = slotsParent.GetComponentsInChildren<InventorySlot>(true);
+    }
+    private void Start()
+    {
+        inventory = InventoryManager.instance;
+
+        if (inventory != null)
+        {
+            inventory.OnInventoryChanged -= Refresh;
+            inventory.OnInventoryChanged += Refresh;
+
+            Refresh();
+        }
+        else
+        {
+            Debug.LogError("InventoryUI: SOS! Не можу знайти InventoryManager.instance!");
+        }
     }
 
     private void OnEnable()
     {
-        // Підписуємось на подію зміни інвентаря
         if (inventory != null)
         {
             inventory.OnInventoryChanged += Refresh;
@@ -47,14 +59,14 @@ public class InventoryUI : MonoBehaviour
 
     private void OnDisable()
     {
-        // Відписуємось, щоб не було витоків і подвійних викликів
         if (inventory != null)
             inventory.OnInventoryChanged -= Refresh;
     }
 
-    // Оновлення відображення інвентаря
     public void Refresh()
     {
+        Debug.Log("InventoryUI: Refresh спрацював!");
+
         if (inventory == null || slots == null) return;
 
         if (itemIconPrefab == null)
@@ -63,7 +75,6 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 1) Очищаємо всі слоти від старих іконок
         foreach (var slot in slots)
         {
             for (int i = slot.transform.childCount - 1; i >= 0; i--)
@@ -72,30 +83,24 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        // 2) Створюємо нові іконки відповідно до inventory.items
-        int count = Mathf.Min(inventory.items.Count, slots.Length);
+        //int count = Mathf.Min(inventory.items.Count, slots.Length);
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < inventory.items.Count; i++)
         {
             ItemData data = inventory.items[i];
             if (data == null) continue;
 
-            // Створюємо іконку предмета в слоті
             GameObject icon = Instantiate(itemIconPrefab, slots[i].transform);
 
-            // Призначаємо спрайт предмета
             var img = icon.GetComponent<Image>();
             if (img != null)
                 img.sprite = data.icon;
 
-            // Налаштовуємо drag & drop
             var drag = icon.GetComponent<DraggableItem>();
             if (drag != null)
             {
-                // Дані предмета
                 drag.itemData = data;
 
-                // Посилання на інвентар (щоб можна було витрачати предмет)
                 drag.inventory = inventory;
                 
                 if (drag.image == null)
