@@ -15,11 +15,12 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-
             //AudioManager.instance.playSFX(AudioManager.instance.clickSound);
 
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D isHit = Physics2D.Raycast(worldPos, Vector2.zero);
+
+            if (isHit.collider == null) return;
 
             //Ground
             if (isHit.collider != null && isHit.collider.CompareTag("Ground"))
@@ -83,11 +84,14 @@ public class InputManager : MonoBehaviour
             }
             else
             {
+                float distance = Vector2.Distance(playerTransform.position, isHit.transform.position);
                 IItemReceiver receiver = isHit.collider.GetComponent<IItemReceiver>();
-
-                if (receiver != null)
+                if (distance <= 2f)
                 {
-                    receiver.TryAcceptItem(null, InventoryManager.instance);
+                    if (receiver != null)
+                    {
+                        receiver.TryAcceptItem(null, InventoryManager.instance);
+                    }
                 }
             }
         }
